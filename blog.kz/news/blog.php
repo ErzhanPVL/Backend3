@@ -36,6 +36,13 @@
 </head>
 <body>
 
+<nav class="navbar navbar-inverse">
+  <ul class="nav navbar-nav">
+    <li><a href="index.php">На главную</a></li>
+  </ul>
+  <p class="navbar-text">Добро пожаловать!</p>
+</nav>
+
 <div class="container-fluid">
   <div class="row content">
 
@@ -45,9 +52,25 @@
       <h4><small>
       <?php
     $connect=mysqli_connect("localhost","root","","test");//Соединяемся с базой данных
-    $result=mysqli_query ($connect, "SELECT * FROM `blog` where id=1");
-    $post=mysqli_fetch_array($result);
-    echo $post['date'];//Выбираем запись даты из таблицы Блог
+	
+	class DataBase//Класс для работы с БД
+	{
+		var $num=1;
+		function result($connect)//Функция для извлечения из БД выбранной новости
+		{
+			$result=mysqli_query($connect, "SELECT * FROM blog where id=$this->num");
+			return $result;
+		}
+		function setNum($num)//Функция для выбора порядкового номера новости
+		{
+			$this->num=$num;
+		}
+	}
+	
+	$object=new DataBase;
+	$object->setNum($_GET['num']);// Выбираем порядковый номер новость
+    $post=mysqli_fetch_array($object->result($connect));
+    echo $post['date']; //Выбираем запись даты из таблицы Блог
   ?>
       </small></h4>
       <hr>
@@ -67,6 +90,9 @@
 
       <h4>Оставить комментарий:</h4>
       <form role="form" action="comment.php" method="get">
+	  <?php
+	  echo "<input name='num' type='hidden' value={$_GET['num']}>";//Отправляем параметр порядкого номера новости для добавления в соответствующее БД коммента
+	  ?>
         <div class="form-group">
           <textarea class="form-control" rows="3" required name='text'></textarea>
         </div>
@@ -79,14 +105,14 @@
       <br><br>
       
       <p><span class="badge"><?php 
-    $result=mysqli_query($connect, "SELECT * FROM `comments`");
+    $result=mysqli_query($connect, "SELECT * FROM `comments{$_GET['num']}`");
     echo mysqli_num_rows($result);
     ?>
       </span> комментарий:</p><br>
       
       <div class="row">
         <?php
-            $result=mysqli_query($connect, "SELECT * FROM `comments`");
+            $result=mysqli_query($connect, "SELECT * FROM `comments{$_GET['num']}`");
             while($data=mysqli_fetch_array($result))//Пробежимся по всем комментам из БД
             {
         ?>

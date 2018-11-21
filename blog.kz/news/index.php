@@ -10,6 +10,13 @@
 </head>
 <body>
 
+<nav class="navbar navbar-inverse">
+  <ul class="nav navbar-nav">
+    <li><a href="#">На главную</a></li>
+  </ul>
+  <p class="navbar-text">Добро пожаловать!</p>
+</nav>
+
 <div class="container">
   <h2>Статьи</h2>            
   <table class="table">
@@ -30,10 +37,10 @@
   while($post=mysqli_fetch_array($data)){//Создаем цикл:"Пока в таблице есть записи"
 ?>  
     <tr>
-        <td><?=++$cnt;//с каждой новой записью, число увеличивается на 1?></td>
-        <td><a href="blog.php"><?=$post['header'];// заголовок?></a></td>
-        <td><?=$post['text'];// основной текст?></td>
-        <td><?=$post['autor'];// автор?></td>
+        <td><?php echo ++$cnt;//с каждой новой записью, число увеличивается на 1?></td>
+        <td><?php echo "<a href='blog.php?num={$cnt}'>", $post['header'];// заголовок, который передаёт параметр номера новости?></a></td>
+        <td><?php echo $post['text'];// основной текст?></td>
+        <td><?php echo $post['autor'];// автор?></td>
     </tr><?
   }//Заполняем ячейки
     ?>

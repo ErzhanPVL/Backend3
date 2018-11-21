@@ -5,7 +5,7 @@ $pwd=$_POST['newpwd'];
 
 if(!empty($usr) && !empty($pwd))//Проверка на пустые поля
 {
-    mysqli_query($connect, "INSERT INTO users (usr,pwd) VALUES ('{$usr}', '{$pwd}')");//Добавление новой записи в базу пользователей
+    mysqli_query($connect, "INSERT INTO users (usr,pwd) VALUES ('{$login}', '{$password}')");//Добавление новой записи в базу пользователей
     header("Location: index.php");
 }
 ?>
